@@ -17,7 +17,10 @@ jobs:
         run: docker build -t jimakosak/webserver .
 
       - name: Log in to Docker Registry
-        run: echo ${{ secrets.DOCKER_REGISTRY_CREDENTIALS }} | docker login -u "$DOCKER_REGISTRY_CREDENTIALS" --password-stdin
+        run: echo "$DOCKER_REGISTRY_USERNAME" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin
+        env:
+          DOCKER_REGISTRY_USERNAME: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
       - name: Tag Docker image
         run: docker tag jimakosak/webserver jimakosak/webserver:${{ github.sha }}
