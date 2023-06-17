@@ -17,7 +17,7 @@ jobs:
         run: docker build -t jimakosak/webserver .
 
       - name: Log in to Docker Registry
-        run: echo "$DOCKER_REGISTRY_USERNAME" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin
+        run: echo "$DOCKER_REGISTRY_TOKEN" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin
         env:
           DOCKER_REGISTRY_USERNAME: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
