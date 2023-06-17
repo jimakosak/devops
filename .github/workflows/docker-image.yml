@@ -1,16 +1,37 @@
-name: Docker Image CI
+name: Docker Build and Push
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t jimakosak/webserver .
+
+      - name: Log in to Docker Registry
+        run: echo ${{ secrets.DOCKER_REGISTRY_CREDENTIALS }} | docker login -u "$DOCKER_REGISTRY_CREDENTIALS" --password-stdin
+
+      - name: Tag Docker image
+        run: docker tag jimakosak/webserver jimakosak/webserver:${{ github.sha }}
+
+      - name: Push Docker image
+        run: docker push jimakosak/webserver:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy application
+        run: echo "Deploy your application here"
