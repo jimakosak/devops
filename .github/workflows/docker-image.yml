@@ -17,14 +17,10 @@ jobs:
         run: docker build -t jimakosak/webserver .
 
       - name: Log in to Docker Registry
-        run:
-            export DOCKER_REGISTRY_TOKEN="dckr_pat_DlAnNT9_CsTlv9mvXXAquzSUc-E"
-            export DOCKER_REGISTRY_USERNAME="jimakosak"
-            docker login -u "$DOCKER_REGISTRY_USERNAME" --password "$DOCKER_REGISTRY_TOKEN"
-        #run: echo "$DOCKER_REGISTRY_TOKEN" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin <<< "$DOCKER_REGISTRY_TOKEN"
-        env:
-          DOCKER_REGISTRY_USERNAME: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
-          DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+        run: |
+          export DOCKER_REGISTRY_TOKEN="dckr_pat_DlAnNT9_CsTlv9mvXXAquzSUc-E"
+          export DOCKER_REGISTRY_USERNAME="jimakosak"
+          docker login -u "$DOCKER_REGISTRY_USERNAME" --password "$DOCKER_REGISTRY_TOKEN"
 
       - name: Tag Docker image
         run: docker tag jimakosak/webserver jimakosak/webserver:${{ github.sha }}
